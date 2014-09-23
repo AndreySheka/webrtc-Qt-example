@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
+    <Keyword>Qt4VSv1.0</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Qt\Qt5.3.1\5.3\msvc2013_opengl\include;F:\webrtc\trunk;F:\webrtc\trunk\third_party\jsoncpp\source\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\WinDDK\7600.16385.1\lib\ATL\i386;C:\WinDDK\7600.16385.1\lib\ATL\i386;F:\webrtc\trunk\build\Debug\lib;</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\WinDDK\7600.16385.1\lib\ATL\i386;C:\WinDDK\7600.16385.1\lib\ATL\i386;F:\webrtc\trunk\build\Debug\lib;</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Qt\Qt5.3.1\5.3\msvc2013_opengl\include;F:\webrtc\trunk;F:\webrtc\trunk\third_party\jsoncpp\source\include;</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <AdditionalOptions>/D "V8_DEPRECATION_WARNINGS" /D "BLINK_SCALE_FILTERS_AT_RECORD_TIME" /D "EXPAT_RELATIVE_PATH" /D "FEATURE_ENABLE_VOICEMAIL" /D "GTEST_RELATIVE_PATH" /D "JSONCPP_RELATIVE_PATH" /D "LOGGING=1" /D "SRTP_RELATIVE_PATH" /D "FEATURE_ENABLE_SSL" /D "FEATURE_ENABLE_PSTN" /D "HAVE_SCTP" /D "HAVE_SRTP" /D "HAVE_WEBRTC_VIDEO" /D "HAVE_WEBRTC_VOICE" /D "USE_WEBRTC_DEV_BRANCH" /D "_WIN32_WINNT=0x0602" /D "WINVER=0x0602" /D "WIN32" /D "_WINDOWS" /D "NOMINMAX" /D "PSAPI_VERSION=1" /D "_CRT_RAND_S" /D "CERT_CHAIN_PARA_HAS_EXTRA_FIELDS" /D "WIN32_LEAN_AND_MEAN" /D "_ATL_NO_OPENGL" /D "_HAS_EXCEPTIONS=0" /D "CHROMIUM_BUILD" /D "TOOLKIT_VIEWS=1" /D "USE_AURA=1" /D "USE_ASH=1" /D "USE_DEFAULT_RENDER_THEME=1" /D "USE_LIBJPEG_TURBO=1" /D "ENABLE_ONE_CLICK_SIGNIN" /D "ENABLE_PRE_SYNC_BACKUP" /D "ENABLE_REMOTING=1" /D "ENABLE_WEBRTC=1" /D "ENABLE_PEPPER_CDMS" /D "ENABLE_CONFIGURATION_POLICY" /D "ENABLE_NOTIFICATIONS" /D "ENABLE_HIDPI=1" /D "ENABLE_EGLIMAGE=1" /D "__STD_C" /D "_CRT_SECURE_NO_DEPRECATE" /D "_SCL_SECURE_NO_DEPRECATE" /D "NTDDI_VERSION=0x06020000" /D "_USING_V110_SDK71_" /D "ENABLE_TASK_MANAGER=1" /D "ENABLE_EXTENSIONS=1" /D "ENABLE_PLUGIN_INSTALLATION=1" /D "ENABLE_PLUGINS=1" /D "ENABLE_SESSION_SERVICE=1" /D "ENABLE_THEMES=1" /D "ENABLE_AUTOFILL_DIALOG=1" /D "ENABLE_BACKGROUND=1" /D "ENABLE_GOOGLE_NOW=1" /D "CLD_VERSION=2" /D "CLD2_DATA_SOURCE=static" /D "CLD_DATA_FROM_STATIC" /D "ENABLE_FULL_PRINTING=1" /D "ENABLE_PRINTING=1" /D "WIN_PDF_METAFILE_FOR_PRINTING=1" /D "ENABLE_SPELLCHECK=1" /D "ENABLE_CAPTIVE_PORTAL_DETECTION=1" /D "ENABLE_APP_LIST=1" /D "ENABLE_SETTINGS_APP=1" /D "ENABLE_MANAGED_USERS=1" /D "ENABLE_MDNS=1" /D "ENABLE_SERVICE_DISCOVERY=1" /D "ENABLE_WIFI_BOOTSTRAPPING=1" /D "LIBPEERCONNECTION_LIB=1" /D "SSL_USE_NSS" /D "HAVE_NSS_SSL_H" /D "SSL_USE_NSS_RNG" /D "NSS_PLATFORM_CLIENT_AUTH" /D "NO_NSPR_10_SUPPORT" /D "NSPR_STATIC" /D "NSS_STATIC" /D "NSS_USE_STATIC_LIBS" /D "USE_UTIL_DIRECTLY" /D "_CRT_NONSTDC_NO_WARNINGS" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "DYNAMIC_ANNOTATIONS_ENABLED=1" /D "WTF_USE_DYNAMIC_ANNOTATIONS=1" /D "_UNICODE" /D "UNICODE" /D _X86_ %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Network.lib;CNG.lib;G711.lib;G722.lib;PCM16B.lib;acm_receive_test.lib;audio_coding_module.lib;audio_conference_mixer.lib;audio_device.lib;audio_processing.lib;audio_processing_sse2.lib;audioproc_debug_proto.lib;audioproc_unittest_proto.lib;bitrate_controller.lib;bwe_tools_util.lib;channel_transport.lib;command_line_parser.lib;common_audio.lib;common_audio_sse2.lib;common_video.lib;crnspr.lib;crnss.lib;crssl.lib;desktop_capture.lib;desktop_capture_differ_sse2.lib;directshow_baseclasses.lib;expat.lib;field_trial.lib;field_trial_default.lib;frame_editing_lib.lib;frame_generator.lib;genperf_libs.lib;gflags.lib;gmock.lib;gtest.lib;gunit.lib;iLBC.lib;iSAC.lib;iSACFix.lib;icudata.lib;icui18n.lib;icuuc.lib;jsoncpp.lib;libjingle.lib;libjingle_media.lib;libjingle_p2p.lib;libjingle_peerconnection.lib;libjingle_sound.lib;libjingle_unittest_main.lib;libjingle_xmpphelp.lib;libjpeg.lib;libsrtp.lib;libvietest.lib;libvpx.lib;libvpx_asm_offsets_vp8.lib;libvpx_intrinsics_mmx.lib;libvpx_intrinsics_sse2.lib;libvpx_intrinsics_sse4_1.lib;libvpx_intrinsics_ssse3.lib;media_file.lib;metrics.lib;neteq.lib;neteq_test_support.lib;neteq_test_tools.lib;neteq_unittest_tools.lib;nss_static.lib;openmax_dl.lib;opus.lib;paced_sender.lib;protobuf_full_do_not_use.lib;protobuf_lite.lib;rbe_components.lib;remote_bitrate_estimator.lib;rtcp_packet_parser.lib;rtp_rtcp.lib;sqlite3.lib;system_wrappers.lib;test_framework.lib;test_main.lib;test_support.lib;test_support_main.lib;usrsctplib.lib;video_capture_module.lib;video_codecs_test_framework.lib;video_coding_utility.lib;video_engine_core.lib;video_processing.lib;video_processing_sse2.lib;video_quality_analysis.lib;video_render_module.lib;voice_engine.lib;webrtc.lib;webrtc_base.lib;webrtc_base_tests_utils.lib;webrtc_common.lib;webrtc_i420.lib;webrtc_opus.lib;webrtc_test_common.lib;webrtc_test_renderer.lib;webrtc_utility.lib;webrtc_video_coding.lib;webrtc_vp8.lib;libyuv.lib;Msdmo.lib;Dmoguids.lib;Secur32.lib;wmcodecdspuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat />
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <AdditionalOptions>/D "V8_DEPRECATION_WARNINGS" /D "BLINK_SCALE_FILTERS_AT_RECORD_TIME" /D "EXPAT_RELATIVE_PATH" /D "FEATURE_ENABLE_VOICEMAIL" /D "GTEST_RELATIVE_PATH" /D "JSONCPP_RELATIVE_PATH" /D "LOGGING=1" /D "SRTP_RELATIVE_PATH" /D "FEATURE_ENABLE_SSL" /D "FEATURE_ENABLE_PSTN" /D "HAVE_SCTP" /D "HAVE_SRTP" /D "HAVE_WEBRTC_VIDEO" /D "HAVE_WEBRTC_VOICE" /D "USE_WEBRTC_DEV_BRANCH" /D "_WIN32_WINNT=0x0602" /D "WINVER=0x0602" /D "WIN32" /D "_WINDOWS" /D "NOMINMAX" /D "PSAPI_VERSION=1" /D "_CRT_RAND_S" /D "CERT_CHAIN_PARA_HAS_EXTRA_FIELDS" /D "WIN32_LEAN_AND_MEAN" /D "_ATL_NO_OPENGL" /D "_HAS_EXCEPTIONS=0" /D "CHROMIUM_BUILD" /D "TOOLKIT_VIEWS=1" /D "USE_AURA=1" /D "USE_ASH=1" /D "USE_DEFAULT_RENDER_THEME=1" /D "USE_LIBJPEG_TURBO=1" /D "ENABLE_ONE_CLICK_SIGNIN" /D "ENABLE_PRE_SYNC_BACKUP" /D "ENABLE_REMOTING=1" /D "ENABLE_WEBRTC=1" /D "ENABLE_PEPPER_CDMS" /D "ENABLE_CONFIGURATION_POLICY" /D "ENABLE_NOTIFICATIONS" /D "ENABLE_HIDPI=1" /D "ENABLE_EGLIMAGE=1" /D "__STD_C" /D "_CRT_SECURE_NO_DEPRECATE" /D "_SCL_SECURE_NO_DEPRECATE" /D "NTDDI_VERSION=0x06020000" /D "_USING_V110_SDK71_" /D "ENABLE_TASK_MANAGER=1" /D "ENABLE_EXTENSIONS=1" /D "ENABLE_PLUGIN_INSTALLATION=1" /D "ENABLE_PLUGINS=1" /D "ENABLE_SESSION_SERVICE=1" /D "ENABLE_THEMES=1" /D "ENABLE_AUTOFILL_DIALOG=1" /D "ENABLE_BACKGROUND=1" /D "ENABLE_GOOGLE_NOW=1" /D "CLD_VERSION=2" /D "CLD2_DATA_SOURCE=static" /D "CLD_DATA_FROM_STATIC" /D "ENABLE_FULL_PRINTING=1" /D "ENABLE_PRINTING=1" /D "WIN_PDF_METAFILE_FOR_PRINTING=1" /D "ENABLE_SPELLCHECK=1" /D "ENABLE_CAPTIVE_PORTAL_DETECTION=1" /D "ENABLE_APP_LIST=1" /D "ENABLE_SETTINGS_APP=1" /D "ENABLE_MANAGED_USERS=1" /D "ENABLE_MDNS=1" /D "ENABLE_SERVICE_DISCOVERY=1" /D "ENABLE_WIFI_BOOTSTRAPPING=1" /D "LIBPEERCONNECTION_LIB=1" /D "SSL_USE_NSS" /D "HAVE_NSS_SSL_H" /D "SSL_USE_NSS_RNG" /D "NSS_PLATFORM_CLIENT_AUTH" /D "NO_NSPR_10_SUPPORT" /D "NSPR_STATIC" /D "NSS_STATIC" /D "NSS_USE_STATIC_LIBS" /D "USE_UTIL_DIRECTLY" /D "_CRT_NONSTDC_NO_WARNINGS" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "DYNAMIC_ANNOTATIONS_ENABLED=1" /D "WTF_USE_DYNAMIC_ANNOTATIONS=1" /D "_UNICODE" /D "UNICODE" /D _X86_ %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5Network.lib;CNG.lib;G711.lib;G722.lib;PCM16B.lib;acm_receive_test.lib;audio_coding_module.lib;audio_conference_mixer.lib;audio_device.lib;audio_processing.lib;audio_processing_sse2.lib;audioproc_debug_proto.lib;audioproc_unittest_proto.lib;bitrate_controller.lib;bwe_tools_util.lib;channel_transport.lib;command_line_parser.lib;common_audio.lib;common_audio_sse2.lib;common_video.lib;crnspr.lib;crnss.lib;crssl.lib;desktop_capture.lib;desktop_capture_differ_sse2.lib;directshow_baseclasses.lib;expat.lib;field_trial.lib;field_trial_default.lib;frame_editing_lib.lib;frame_generator.lib;genperf_libs.lib;gflags.lib;gmock.lib;gtest.lib;gunit.lib;iLBC.lib;iSAC.lib;iSACFix.lib;icudata.lib;icui18n.lib;icuuc.lib;jsoncpp.lib;libjingle.lib;libjingle_media.lib;libjingle_p2p.lib;libjingle_peerconnection.lib;libjingle_sound.lib;libjingle_unittest_main.lib;libjingle_xmpphelp.lib;libjpeg.lib;libsrtp.lib;libvietest.lib;libvpx.lib;libvpx_asm_offsets_vp8.lib;libvpx_intrinsics_mmx.lib;libvpx_intrinsics_sse2.lib;libvpx_intrinsics_sse4_1.lib;libvpx_intrinsics_ssse3.lib;media_file.lib;metrics.lib;neteq.lib;neteq_test_support.lib;neteq_test_tools.lib;neteq_unittest_tools.lib;nss_static.lib;openmax_dl.lib;opus.lib;paced_sender.lib;protobuf_full_do_not_use.lib;protobuf_lite.lib;rbe_components.lib;remote_bitrate_estimator.lib;rtcp_packet_parser.lib;rtp_rtcp.lib;sqlite3.lib;system_wrappers.lib;test_framework.lib;test_main.lib;test_support.lib;test_support_main.lib;usrsctplib.lib;video_capture_module.lib;video_codecs_test_framework.lib;video_coding_utility.lib;video_engine_core.lib;video_processing.lib;video_processing_sse2.lib;video_quality_analysis.lib;video_render_module.lib;voice_engine.lib;webrtc.lib;webrtc_base.lib;webrtc_base_tests_utils.lib;webrtc_common.lib;webrtc_i420.lib;webrtc_opus.lib;webrtc_test_common.lib;webrtc_test_renderer.lib;webrtc_utility.lib;webrtc_video_coding.lib;webrtc_vp8.lib;libyuv.lib;Msdmo.lib;Dmoguids.lib;Secur32.lib;wmcodecdspuuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="defaults.cc" />
+    <ClCompile Include="GeneratedFiles\Debug\moc_peerclientui.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_qasysocket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_peerclientui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_peerclientui.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_qasysocket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="peerclientui.cpp" />
+    <ClCompile Include="PeerConductor.cpp" />
+    <ClCompile Include="PeerconnectionClient.cpp" />
+    <ClCompile Include="qasysocket.cpp" />
+    <ClCompile Include="stringutils.cc" />
+    <ClCompile Include="VCWnd.cpp" />
+    <ClCompile Include="VideoRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="peerclientui.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing peerclientui.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing peerclientui.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="peerclientui.ui">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="defaults.h" />
+    <ClInclude Include="GeneratedFiles\ui_peerclientui.h" />
+    <ClInclude Include="PeerConductor.h" />
+    <ClInclude Include="PeerconnectionClient.h" />
+    <ClInclude Include="PeerConnectionClientObserver.h" />
+    <CustomBuild Include="qasysocket.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing qasysocket.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing qasysocket.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
+    </CustomBuild>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stringutils.h" />
+    <ClInclude Include="UIcallbackInterface.h" />
+    <ClInclude Include="VCWnd.h" />
+    <ClInclude Include="VideoRenderer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="peerclientui.qrc">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath);%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\videochat.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" Qt5Version_x0020_Win32="5.3" MocOptions="" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

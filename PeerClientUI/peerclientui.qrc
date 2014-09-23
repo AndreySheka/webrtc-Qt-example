@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="PeerClientUI">
+    <file>Resources/videochat.ico</file>
+    <file>Resources/wlm.ico</file>
+    <file>Resources/network.ico</file>
+  </qresource>
+</RCC>
