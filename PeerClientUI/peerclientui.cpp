@@ -1,9 +1,9 @@
 #include "peerclientui.h"
 PeerClientUI::PeerClientUI(QWidget *parent)
 	: QMainWindow(parent),
-	
-	client_(this),
-	is_connected(false)
+	is_connected(false),
+	client_(NULL),
+	conductor_(NULL)
 	
 {
 	peer_state_ = PeerStatus::NOT_CONNECTED;
@@ -13,8 +13,6 @@ PeerClientUI::PeerClientUI(QWidget *parent)
 	own_wnd_ = NULL;
 	peer_wnd_ = NULL;
 	on_addstream_ = false;
-	conductor_ = new talk_base::RefCountedObject<PeerConductor>(&client_, this);
-	client_.client_observer_ = conductor_.get();
 	ui.setupUi(this);
 	connect(ui.ConnectButton, SIGNAL(clicked()), 
 		this, SLOT(OnConnect()));
@@ -43,7 +41,8 @@ PeerClientUI::~PeerClientUI()
 
 void PeerClientUI::closeEvent(QCloseEvent* event)
 {
-	conductor_->DeletePeerConnection();
+	if (conductor_)
+		conductor_->DeletePeerConnection();
 	if (own_wnd_)
 	{
 		delete own_wnd_;
@@ -59,6 +58,7 @@ void PeerClientUI::closeEvent(QCloseEvent* event)
 }
 void PeerClientUI::OnConnect()
 {
+	InitializeClient();
 	conductor_->OnStartLogin(ui.server_lineEdit->text().toStdString()
 							,ui.port_lineEdit->text().toInt());
 	is_connected = true;
@@ -110,6 +110,12 @@ void PeerClientUI::OnDisconnect()
 	ui.ConnectButton->setEnabled(false);
 	is_connected = false;
 	timer_id_=startTimer(3000);
+	ASSERT(client_);
+	ASSERT(conductor_);
+	delete client_;
+	client_ = NULL;
+	delete conductor_;
+	conductor_ = NULL;
 
 }
 
@@ -151,7 +157,7 @@ void PeerClientUI::RefreshPeerList(Json::Value peer_list)
 	{
 		jpeer = *i;
 		peer_id = jpeer["peer_id"].asInt();
-		if (client_.my_id_ != peer_id)
+		if (client_->my_id_ != peer_id)
 		{
 			peer.clear();
 			peer = jpeer["peer_name"].asString() + "@" + jpeer["peer_id"].asString();
@@ -181,15 +187,23 @@ void PeerClientUI::StartRemoteRenderer(webrtc::VideoTrackInterface* remote_video
 
 void PeerClientUI::StopLocalRenderer()
 {
-	local_renderer_.reset();
-	log(NORMAL, new QString("stopped local renderer."));
+	if (local_renderer_.get())
+	{
+		local_renderer_.reset();
+		log(NORMAL, new QString("stopped local renderer."));
+	}
+	
 }
 
 
 void PeerClientUI::StopRemoteRenderer()
 {
-	remote_renderer_.reset();
-	log(NORMAL, new QString("stopped remote renderer."));
+	if (remote_renderer_.get())
+	{
+		remote_renderer_.reset();
+		log(NORMAL, new QString("stopped remote renderer."));
+	}
+
 }
 
 void PeerClientUI::OnClear()
@@ -244,4 +258,13 @@ void PeerClientUI::log(LogType type,QString* log)
 	default:
 		break;
 	}
+}
+
+void PeerClientUI::InitializeClient() //to init peerclient and peer conductor
+{
+	ASSERT(!client_);
+	ASSERT(!conductor_);
+	client_ = new PeerConnectionClient(this);
+	conductor_ = new PeerConductor(client_, this);
+	client_->client_observer_ = conductor_.get();
 }

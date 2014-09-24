@@ -35,6 +35,7 @@ public:
 	~PeerClientUI();
 	
 	void SetUIstatus(PeerStatus status);
+	void InitializeClient();
 	virtual void StartLocalRenderer(webrtc::VideoTrackInterface* local_video);
 	virtual void StopLocalRenderer();
 	virtual void StartRemoteRenderer(webrtc::VideoTrackInterface* remote_video);
@@ -44,7 +45,7 @@ public:
 	virtual void timerEvent(QTimerEvent *event);
 	virtual void log(LogType type, QString* log);
 private:
-	PeerConnectionClient client_;
+	PeerConnectionClient* client_;
 	talk_base::scoped_refptr<PeerConductor> conductor_;
 	std::string server_;
 	int port_;

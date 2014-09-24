@@ -87,7 +87,6 @@ public:
         peerlistView = new QListView(page_2);
         peerlistView->setObjectName(QStringLiteral("peerlistView"));
         peerlistView->setGeometry(QRect(0, 20, 511, 191));
-		peerlistView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         talkButton = new QPushButton(page_2);
         talkButton->setObjectName(QStringLiteral("talkButton"));
         talkButton->setGeometry(QRect(520, 30, 75, 23));
@@ -101,7 +100,6 @@ public:
         logtextEdit->setObjectName(QStringLiteral("logtextEdit"));
         logtextEdit->setGeometry(QRect(0, 216, 511, 201));
         logtextEdit->setReadOnly(true);
-		logtextEdit->setFontPointSize(10);
         stackedWidget->addWidget(page_2);
         PeerClientUIClass->setCentralWidget(centralWidget);
 

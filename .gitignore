@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.pdb
 
 # Precompiled Headers
 *.gch
@@ -26,3 +27,8 @@
 *.exe
 *.out
 *.app
+
+#VS project files
+*.suo
+*.sdf
+*.user
