@@ -1,12 +1,10 @@
 #include "PeerConductor.h"
 #include "talk\app\webrtc\mediastreaminterface.h"
-
+#include "F:\webrtc\trunk\talk\media\base\capturemanager.cc"
 PeerConductor::PeerConductor(PeerConnectionClient *client, render::UIcallbackInterface* UIinterface)
 	:client_(client), 
 	peer_id_(INVALID_ID),
-	UI_(UIinterface),
-	peer_connection_(NULL),
-	peer_connection_factory_(NULL)
+	UI_(UIinterface)
 {
 	ASSERT(client);
 	ASSERT(UIinterface);
@@ -50,7 +48,7 @@ void PeerConductor::OnMessageFromPeer(int peer_id, const Json::Value message)
 	ASSERT(peer_id_ == peer_id || peer_id_ == -1);
 	ASSERT(!message.empty());
 
-	if (!peer_connection_) 
+	if (!peer_connection_.get()) 
 	{
 		ASSERT(peer_id_ == -1);
 		peer_id_ = peer_id;
@@ -144,7 +142,7 @@ void PeerConductor::OnConnectToPeer(int peer_id)
 	ASSERT(peer_id_ == -1);
 	ASSERT(peer_id != -1);
 
-	if (peer_connection_) 
+	if (peer_connection_.get()) 
 	{
 		//err
 		UI_->log(render::UIcallbackInterface::ERRORS, new QString("peer connection creation failed."));
@@ -165,12 +163,12 @@ void PeerConductor::OnConnectToPeer(int peer_id)
 
 bool PeerConductor::InitializePeerConnection()
 {
-	ASSERT(peer_connection_factory_== NULL);
-	ASSERT(peer_connection_ == NULL);
+	ASSERT(peer_connection_factory_.get()== NULL);
+	ASSERT(peer_connection_.get() == NULL);
 
 	peer_connection_factory_ = webrtc::CreatePeerConnectionFactory();
 
-	if (!peer_connection_factory_) 
+	if (!peer_connection_factory_.get()) 
 	{
 		UI_->log(render::UIcallbackInterface::ERRORS, new QString("peer connection factory initialization failed."));
 		DeletePeerConnection();
@@ -194,27 +192,15 @@ bool PeerConductor::InitializePeerConnection()
 	}
 	AddStreams();
 	UI_->log(UI_->NORMAL, new QString("Initialization of PeerConnection finished."));
-	return peer_connection_ != NULL;
+	return peer_connection_.get() != NULL;
 }
 
 void PeerConductor::DeletePeerConnection() 
 {
 	UI_->StopLocalRenderer();
 	UI_->StopRemoteRenderer();
-	if (peer_connection_)
-		delete peer_connection_;
-	peer_connection_ = NULL;
-	for (std::map<std::string, talk_base::scoped_refptr<webrtc::MediaStreamInterface>>
-		::const_iterator i = active_streams_.begin();
-		i != active_streams_.end(); i++)
-	{
-		i->second.get()->RemoveTrack(audio_track_);
-		i->second.get()->RemoveTrack(video_track_);
-	}
-	active_streams_.clear();
-	if (peer_connection_factory_)
-		delete peer_connection_factory_;
-	peer_connection_factory_ = NULL;
+	peer_connection_.release();
+	peer_connection_factory_.release();
 	peer_id_ = -1;
 	UI_->log(render::UIcallbackInterface::NORMAL, new QString("succeed to delete peer."));
 }
@@ -223,6 +209,11 @@ void PeerConductor::AddStreams() {
 	if (active_streams_.find(kStreamLabel) != active_streams_.end())
 	{
 		UI_->log(render::UIcallbackInterface::NORMAL, new QString("streams already added."));
+		UI_->StartLocalRenderer(video_track_);
+		if (!peer_connection_->AddStream(stream_, NULL)) {
+			//err
+			UI_->log(render::UIcallbackInterface::ERRORS, new QString("streams addition failed."));
+		}
 		return;  // Already added.
 	}
 		
@@ -245,6 +236,7 @@ void PeerConductor::AddStreams() {
 	stream->AddTrack(video_track);
 	audio_track_ = audio_track.get();
 	video_track_ = video_track.get();
+	stream_ = stream;
 	UI_->log(UI_->NORMAL, new QString("audio and video streams added."));
 	if (!peer_connection_->AddStream(stream, NULL)) {
 		//err

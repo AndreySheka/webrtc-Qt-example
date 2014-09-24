@@ -44,7 +44,6 @@ render::VCWnd::~VCWnd()
 
 void render::VCWnd::closeEvent(QCloseEvent* event)
 {
-	UI_->SetUIstatus(UI_->CONNECTED);
 }
 
 void render::VCWnd::paintEvent(QPaintEvent* event)

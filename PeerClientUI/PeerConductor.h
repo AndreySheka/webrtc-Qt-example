@@ -112,21 +112,18 @@ public:
 	virtual void OnSuccess(webrtc::SessionDescriptionInterface* desc);
 	virtual void OnFailure(const std::string& error){}
 
-	//we don't want to use RefCountInterface class.
-	virtual int AddRef(){return 0;}
-	virtual int Release(){ return 0; };
-
 private:
 	int peer_id_;
 	render::UIcallbackInterface *UI_;
-	webrtc::PeerConnectionInterface* peer_connection_;
-	webrtc::PeerConnectionFactoryInterface *
+	talk_base::scoped_refptr<webrtc::PeerConnectionInterface> peer_connection_;
+	talk_base::scoped_refptr<webrtc::PeerConnectionFactoryInterface>
 		peer_connection_factory_;
 	PeerConnectionClient *client_;
 	std::map<std::string, talk_base::scoped_refptr<webrtc::MediaStreamInterface> >
 		active_streams_;
 	webrtc::AudioTrackInterface *audio_track_;
 	webrtc::VideoTrackInterface *video_track_;
+	talk_base::scoped_refptr<webrtc::MediaStreamInterface> stream_;
 	std::string server_;
 	CRITICAL_SECTION lock;
 };

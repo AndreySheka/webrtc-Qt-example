@@ -31,4 +31,4 @@
 #VS project files
 *.suo
 *.sdf
-*.user
+*.vcxproj.user

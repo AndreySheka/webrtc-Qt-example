@@ -6,6 +6,7 @@ PeerClientUI::PeerClientUI(QWidget *parent)
 	conductor_(NULL)
 	
 {
+	InitializeClient();
 	peer_state_ = PeerStatus::NOT_CONNECTED;
 	peer_id_ = -1;
 	pending_timer_ = startTimer(3000);
@@ -58,7 +59,6 @@ void PeerClientUI::closeEvent(QCloseEvent* event)
 }
 void PeerClientUI::OnConnect()
 {
-	InitializeClient();
 	conductor_->OnStartLogin(ui.server_lineEdit->text().toStdString()
 							,ui.port_lineEdit->text().toInt());
 	is_connected = true;
@@ -110,13 +110,6 @@ void PeerClientUI::OnDisconnect()
 	ui.ConnectButton->setEnabled(false);
 	is_connected = false;
 	timer_id_=startTimer(3000);
-	ASSERT(client_);
-	ASSERT(conductor_);
-	delete client_;
-	client_ = NULL;
-	delete conductor_;
-	conductor_ = NULL;
-
 }
 
 void PeerClientUI::OnListClicked(const QModelIndex &index)
@@ -263,8 +256,8 @@ void PeerClientUI::log(LogType type,QString* log)
 void PeerClientUI::InitializeClient() //to init peerclient and peer conductor
 {
 	ASSERT(!client_);
-	ASSERT(!conductor_);
+	ASSERT(!conductor_.get());
 	client_ = new PeerConnectionClient(this);
-	conductor_ = new PeerConductor(client_, this);
+	conductor_ = new talk_base::RefCountedObject<PeerConductor>(client_, this);
 	client_->client_observer_ = conductor_.get();
 }
