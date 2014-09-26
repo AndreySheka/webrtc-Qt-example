@@ -1,4 +1,5 @@
 #include "peerclientui.h"
+#include "qmessagebox.h"
 PeerClientUI::PeerClientUI(QWidget *parent)
 	: QMainWindow(parent),
 	is_connected(false),
@@ -26,7 +27,7 @@ PeerClientUI::PeerClientUI(QWidget *parent)
 	connect(ui.peerlistView, SIGNAL(doubleClicked(const QModelIndex &)),
 		this, SLOT(OnListClicked(const QModelIndex &)));
 	ui.stackedWidget->setCurrentIndex(0);
-	QRegExp regex("[1-9][0-9]{0,2}\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})");
+	QRegExp regex("(([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\.(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\.(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\.(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}");
 	QRegExpValidator *regexv = new QRegExpValidator(regex,ui.page);
 	ui.server_lineEdit->setValidator(regexv);
 	QIntValidator *intv = new QIntValidator(1, 65535, ui.page);
@@ -59,9 +60,23 @@ void PeerClientUI::closeEvent(QCloseEvent* event)
 }
 void PeerClientUI::OnConnect()
 {
-	conductor_->OnStartLogin(ui.server_lineEdit->text().toStdString()
-							,ui.port_lineEdit->text().toInt());
-	is_connected = true;
+	int pos = 0;
+	QString str;
+	if (QValidator::Acceptable == ui.server_lineEdit->validator()->validate(ui.server_lineEdit->text(), pos))
+	{
+		if (ui.port_lineEdit->text().toInt() <= 0)
+			log(ERRORS, new QString("invalid port."));
+		else
+		{
+			conductor_->OnStartLogin(ui.server_lineEdit->text().toStdString()
+									,ui.port_lineEdit->text().toInt());
+			is_connected = true;
+		}
+
+	}
+	else
+		log(ERRORS, new QString("invalid ip."));
+
 }
 
 void PeerClientUI::OnTalk()
