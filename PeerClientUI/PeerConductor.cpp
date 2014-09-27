@@ -16,16 +16,16 @@ PeerConductor::~PeerConductor()
 {
 }
 
-void PeerConductor::OnStartLogin(const std::string server, int port)
+bool PeerConductor::OnStartLogin(const std::string server, int port)
 {
 	if (client_->is_connected())
 	{
 		UI_->log(render::UIcallbackInterface::WARNING, new QString("already logged in."));
-		return;
+		return false;
 	}
 		
 	server_ = server;
-	client_->ConnectToServer(server,port);
+	return client_->ConnectToServer(server,port);
 }
 
 void PeerConductor::OnSignedIn()

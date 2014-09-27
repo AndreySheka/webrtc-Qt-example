@@ -60,8 +60,7 @@ bool PeerConnectionClient::ConnectToServer(const std::string& server, int port)
 		port = kDefaultServerPort;
 	server_=server;
 	port_=port;
-	DoConnect();
-	return true;
+	return DoConnect();
 }
 
 bool PeerConnectionClient::ConnectControlSocket()
@@ -78,7 +77,7 @@ bool PeerConnectionClient::ConnectControlSocket()
 	return true;
 }
 
-void PeerConnectionClient::DoConnect()
+bool PeerConnectionClient::DoConnect()
 {
 	Json::Value msg;
 	Json::FastWriter writer;
@@ -89,10 +88,13 @@ void PeerConnectionClient::DoConnect()
 	bool ret = ConnectControlSocket();
 	if (ret)
 		state_ = SIGNING_IN;
-	if (!ret) {
+	if (!ret) 
+	{
 		UI_->log(UI_->ERRORS, new QString("cannot connect to server."));
+		UI_->msgbox(UI_->WARNING, new QString("cannot connect to server.\nplease check the ip/port\nthen try again."));
 		client_observer_->OnServerConnectionFailure();
 	}
+	return ret;
 }
 
 void PeerConnectionClient::OnConnect(QAsySocket* socket)

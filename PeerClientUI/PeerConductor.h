@@ -72,7 +72,7 @@ public:
 	cricket::VideoCapturer* OpenVideoCaptureDevice();
 
 	//UI signal slot
-	virtual void OnStartLogin(const std::string server, int port);
+	virtual bool OnStartLogin(const std::string server, int port);
 	virtual void OnDisconnectFromServer(){ client_->SignOut(); }
 	virtual void OnConnectToPeer(int peer_id);
 	virtual void OnDisconnectFromCurrentPeer();//should always call it to disconnect from peer

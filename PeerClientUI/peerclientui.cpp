@@ -64,18 +64,28 @@ void PeerClientUI::OnConnect()
 	QString str;
 	if (QValidator::Acceptable == ui.server_lineEdit->validator()->validate(ui.server_lineEdit->text(), pos))
 	{
-		if (ui.port_lineEdit->text().toInt() <= 0)
-			log(ERRORS, new QString("invalid port."));
+		if (ui.port_lineEdit->text().toInt() > 0)
+		{
+			if(conductor_->
+				OnStartLogin(ui.server_lineEdit->text().toStdString(),
+				ui.port_lineEdit->text().toInt()));
+				is_connected = true;
+		}
 		else
 		{
-			conductor_->OnStartLogin(ui.server_lineEdit->text().toStdString()
-									,ui.port_lineEdit->text().toInt());
-			is_connected = true;
+			msgbox(WARNING, new QString("recieved invalid ip/port.\nplease check your input\nthen try again."));
+			log(ERRORS, new QString("invalid port."));
 		}
+			
+
 
 	}
 	else
+	{
+		msgbox(WARNING, new QString("recieved invalid ip/port.\nplease check your input\nthen try again."));
 		log(ERRORS, new QString("invalid ip."));
+	}
+		
 
 }
 
@@ -275,4 +285,30 @@ void PeerClientUI::InitializeClient() //to init peerclient and peer conductor
 	client_ = new PeerConnectionClient(this);
 	conductor_ = new talk_base::RefCountedObject<PeerConductor>(client_, this);
 	client_->client_observer_ = conductor_.get();
+}
+
+
+//thread block function.
+void PeerClientUI::msgbox(LogType type, QString* log)
+{
+	QMessageBox msgbx(this);
+	switch (type)
+	{
+	case PeerClientUI::NORMAL:
+		msgbx.setIcon(QMessageBox::Information);
+		msgbx.setWindowIconText("INFO");
+		break;
+	case PeerClientUI::WARNING:
+		msgbx.setIcon(QMessageBox::Warning);
+		msgbx.setWindowIconText("WARNING");
+		break;
+	case PeerClientUI::ERRORS:
+		msgbx.setIcon(QMessageBox::Critical);
+		msgbx.setWindowIconText("ERROR");
+		break;
+	default:
+		break;
+	}
+	msgbx.setText(*log);
+	msgbx.exec();
 }

@@ -44,6 +44,7 @@ public:
 	virtual void closeEvent(QCloseEvent* event);
 	virtual void timerEvent(QTimerEvent *event);
 	virtual void log(LogType type, QString* log);
+	virtual void msgbox(LogType type, QString* log);
 private:
 	PeerConnectionClient* client_;
 	talk_base::scoped_refptr<PeerConductor> conductor_;

@@ -80,7 +80,7 @@ public:
 	void PeerListener();
 	bool InitSocketSignals();
 	bool ConnectToServer(const std::string& server, int port);
-	void DoConnect();
+	bool DoConnect();
 	bool ConnectControlSocket();
 	bool close();
 	void HeartBeatCheck();

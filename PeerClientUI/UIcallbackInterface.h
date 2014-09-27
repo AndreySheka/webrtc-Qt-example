@@ -38,7 +38,8 @@ namespace render
 		virtual void SetUIstatus(PeerStatus status) = 0;
 		virtual void log(LogType type, QString* log) = 0;
 		virtual void OnTalk() = 0;
-		virtual void timerEvent(QTimerEvent *event)=0;
+		virtual void timerEvent(QTimerEvent *event) = 0;
+		virtual void msgbox(LogType type, QString* log) = 0;
 		webrtc::VideoTrackInterface* remote_video;
 		QString peer_name_;
 		bool on_addstream_;
