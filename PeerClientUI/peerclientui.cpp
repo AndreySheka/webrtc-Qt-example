@@ -2,48 +2,35 @@
 #include "qmessagebox.h"
 PeerClientUI::PeerClientUI(QWidget *parent)
 	: QMainWindow(parent),
-	is_connected(false),
+	is_connected_(false),
 	client_(NULL),
-	conductor_(NULL)
+	conductor_(NULL),
+	timer_id_(0)
 	
 {
+	ui.setupUi(this);
 	InitializeClient();
-	peer_state_ = PeerStatus::NOT_CONNECTED;
-	peer_id_ = -1;
-	pending_timer_ = startTimer(3000);
-	is_pending_messages_ = false;
+	initUi();
+	//message pending engines
+	pending_timer_ = startTimer(1000);
+	is_pending_msg_ = false;
 	own_wnd_ = NULL;
 	peer_wnd_ = NULL;
 	on_addstream_ = false;
-	ui.setupUi(this);
-	connect(ui.ConnectButton, SIGNAL(clicked()), 
-		this, SLOT(OnConnect()));
-	connect(ui.disconnectButton, SIGNAL(clicked()),
-		this, SLOT(OnDisconnect()));
-	connect(ui.clearlogButton, SIGNAL(clicked()),
-		this, SLOT(OnClear()));
-	connect(ui.talkButton, SIGNAL(clicked()),
-		this, SLOT(OnTalk()));
-	connect(ui.peerlistView, SIGNAL(doubleClicked(const QModelIndex &)),
-		this, SLOT(OnListClicked(const QModelIndex &)));
-	ui.stackedWidget->setCurrentIndex(0);
-	QRegExp regex("(([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\.(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\.(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\.(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}");
-	QRegExpValidator *regexv = new QRegExpValidator(regex,ui.page);
-	ui.server_lineEdit->setValidator(regexv);
-	QIntValidator *intv = new QIntValidator(1, 65535, ui.page);
-	ui.port_lineEdit->setValidator(intv);
-	model_ = new QStringListModel();
-	ui.peerlistView->setModel(model_);
+	peer_state_ = PeerStatus::NOT_CONNECTED;
+	peer_id_ = -1;
 }
 
 PeerClientUI::~PeerClientUI()
 {
 	delete model_;
+	delete client_;
+	conductor_.release();
 }
 
 void PeerClientUI::closeEvent(QCloseEvent* event)
 {
-	if (conductor_)
+	if (conductor_.get())
 		conductor_->DeletePeerConnection();
 	if (own_wnd_)
 	{
@@ -69,12 +56,12 @@ void PeerClientUI::OnConnect()
 			if(conductor_->
 				OnStartLogin(ui.server_lineEdit->text().toStdString(),
 				ui.port_lineEdit->text().toInt()));
-				is_connected = true;
+				is_connected_ = true;
 		}
 		else
 		{
-			msgbox(WARNING, new QString("recieved invalid ip/port.\nplease check your input\nthen try again."));
-			log(ERRORS, new QString("invalid port."));
+			log(WARNING, new QString("recieved invalid ip/port.\nplease check your input\nthen try again."),false);
+			log(ERRORS, new QString("invalid port."), true);
 		}
 			
 
@@ -82,8 +69,8 @@ void PeerClientUI::OnConnect()
 	}
 	else
 	{
-		msgbox(WARNING, new QString("recieved invalid ip/port.\nplease check your input\nthen try again."));
-		log(ERRORS, new QString("invalid ip."));
+		log(WARNING, new QString("recieved invalid ip/port.\nplease check your input\nthen try again."),false);
+		log(ERRORS, new QString("invalid ip."), true);
 	}
 		
 
@@ -98,7 +85,7 @@ void PeerClientUI::OnTalk()
 		{
 			if (!ui.peerlistView->currentIndex().isValid())
 			{
-				log(ERRORS, new QString("please select a legal peer."));
+				log(ERRORS, new QString("please select a legal peer."),false);
 			}
 			else
 			{
@@ -129,11 +116,10 @@ void PeerClientUI::OnTalk()
 
 void PeerClientUI::OnDisconnect()
 {
-
 	conductor_->OnDisconnectFromServer();
 	ui.stackedWidget->setCurrentIndex(0);
 	ui.ConnectButton->setEnabled(false);
-	is_connected = false;
+	is_connected_ = false;
 	timer_id_=startTimer(3000);
 }
 
@@ -191,7 +177,7 @@ void PeerClientUI::StartLocalRenderer(webrtc::VideoTrackInterface* local_video)
 	own_wnd_ = new render::VCWnd(this, true);
 	own_wnd_->show();
 	local_renderer_.reset(new VideoRenderer(own_wnd_, 1, 1, local_video));
-	log(NORMAL, new QString("started local renderer."));
+	log(NORMAL, new QString("started local renderer."), true);
 }
 
 void PeerClientUI::StartRemoteRenderer(webrtc::VideoTrackInterface* remote_video)
@@ -200,7 +186,7 @@ void PeerClientUI::StartRemoteRenderer(webrtc::VideoTrackInterface* remote_video
 	peer_wnd_ = new render::VCWnd(this, false);
 	peer_wnd_->show();
 	remote_renderer_.reset(new VideoRenderer(peer_wnd_, 1, 1, remote_video));
-	log(NORMAL, new QString("started remote renderer."));
+	log(NORMAL, new QString("started remote renderer."), true);
 }
 
 void PeerClientUI::StopLocalRenderer()
@@ -208,7 +194,7 @@ void PeerClientUI::StopLocalRenderer()
 	if (local_renderer_.get())
 	{
 		local_renderer_.reset();
-		log(NORMAL, new QString("stopped local renderer."));
+		log(NORMAL, new QString("stopped local renderer."), true);
 	}
 	
 }
@@ -219,7 +205,7 @@ void PeerClientUI::StopRemoteRenderer()
 	if (remote_renderer_.get())
 	{
 		remote_renderer_.reset();
-		log(NORMAL, new QString("stopped remote renderer."));
+		log(NORMAL, new QString("stopped remote renderer."), true);
 	}
 
 }
@@ -231,51 +217,61 @@ void PeerClientUI::OnClear()
 
 void  PeerClientUI::timerEvent(QTimerEvent *event)
 {
-	if (!is_connected)
+	if (!is_connected_&&timer_id_ == event->timerId())
 	{
+		killTimer(timer_id_);
+		timer_id_ = 0;
 		ui.ConnectButton->setEnabled(true);
+			
 	}
-	if (on_addstream_)
+	else if (pending_timer_ == event->timerId())
 	{
-		StartRemoteRenderer(remote_video);
-		on_addstream_ = false;
-	}
-	if (!is_pending_messages_&&!pending_messages_.empty())
-	{
-		is_pending_messages_ = true;
-		Json::Value msg = pending_messages_.front();
-		Json::FastWriter writer;
-		std::string mm = writer.write(msg);
-		pending_messages_.pop_front();
-		conductor_->OnMessageSent(peer_id_,msg);
-		Sleep(2000);
-		is_pending_messages_ = false;
-	}
-		
+		if (on_addstream_)
+		{
+			StartRemoteRenderer(remote_video);
+			on_addstream_ = false;
+		}
+		if (!is_pending_msg_&&!pending_messages_.empty())
+		{
+			is_pending_msg_ = true;
+			Json::Value msg = pending_messages_.front();
+			Json::FastWriter writer;
+			std::string mm = writer.write(msg);
+			pending_messages_.pop_front();
+			conductor_->OnMessageSent(peer_id_, msg);
+			is_pending_msg_ = false;
+		}
 
+	}
 }
 
-void PeerClientUI::log(LogType type,QString* log)
+void PeerClientUI::log(LogType type, QString* log, bool onconsl)
 {
-	auto time=QTime::currentTime();
-	*log+=" "+time.toString();
-	switch (type)
+	if (onconsl)
 	{
-	case PeerClientUI::NORMAL:
-		ui.logtextEdit->setTextColor(QColor(0, 0, 255));
-		ui.logtextEdit->append(*log);
-		break;
-	case PeerClientUI::WARNING:
-		ui.logtextEdit->setTextColor(QColor(254,149,7));
-		ui.logtextEdit->append(*log);
-		break;
-	case PeerClientUI::ERRORS:
-		ui.logtextEdit->setTextColor(QColor(255, 7, 7));
-		ui.logtextEdit->append(*log);
-		break;
-	default:
-		break;
+		auto time = QTime::currentTime();
+		*log += " " + time.toString();
+		switch (type)
+		{
+		case PeerClientUI::NORMAL:
+			ui.logtextEdit->setTextColor(QColor(0, 0, 255));
+			ui.logtextEdit->append(*log);
+			break;
+		case PeerClientUI::WARNING:
+			ui.logtextEdit->setTextColor(QColor(254, 149, 7));
+			ui.logtextEdit->append(*log);
+			break;
+		case PeerClientUI::ERRORS:
+			ui.logtextEdit->setTextColor(QColor(255, 7, 7));
+			ui.logtextEdit->append(*log);
+			break;
+		default:
+			break;
+		}
 	}
+	else
+		msgbox(type, log);
+	delete log;
 }
 
 void PeerClientUI::InitializeClient() //to init peerclient and peer conductor
@@ -311,4 +307,30 @@ void PeerClientUI::msgbox(LogType type, QString* log)
 	}
 	msgbx.setText(*log);
 	msgbx.exec();
+}
+
+void PeerClientUI::initUi()
+{
+	connect(ui.ConnectButton, SIGNAL(clicked()),
+		this, SLOT(OnConnect()));
+	connect(ui.disconnectButton, SIGNAL(clicked()),
+		this, SLOT(OnDisconnect()));
+	connect(ui.clearlogButton, SIGNAL(clicked()),
+		this, SLOT(OnClear()));
+	connect(ui.talkButton, SIGNAL(clicked()),
+		this, SLOT(OnTalk()));
+	connect(ui.peerlistView, SIGNAL(doubleClicked(const QModelIndex &)),
+		this, SLOT(OnListClicked(const QModelIndex &)));
+	ui.stackedWidget->setCurrentIndex(0);
+	//set input validator with regular expression
+	QRegExp regex("(([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\."
+		"(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\."
+		"(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}\\."
+		"(0|([1-9][0-9]{0,1}){1}|(1[0-9]{2}){1}|(2[0-4][0-9]){1}|(25[0-5]){1}){1}");
+	QRegExpValidator *regexv = new QRegExpValidator(regex, ui.page);
+	ui.server_lineEdit->setValidator(regexv);
+	QIntValidator *intv = new QIntValidator(1, 65535, ui.page);
+	ui.port_lineEdit->setValidator(intv);
+	model_ = new QStringListModel();
+	ui.peerlistView->setModel(model_);
 }

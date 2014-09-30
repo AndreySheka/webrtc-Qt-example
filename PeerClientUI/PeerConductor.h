@@ -17,7 +17,7 @@
 #include "talk\media\devices\devicemanager.h"
 #include "PeerConnectionClientObserver.h"
 #include "PeerconnectionClient.h"
-#include "UIcallbackInterface.h"
+#include "UiObserver.h"
 #include "defaults.h"
 
 namespace webrtc 
@@ -32,7 +32,7 @@ namespace cricket
 
 namespace render
 {
-	class UIcallbackInterface;
+	class UiObserver;
 }
 
 
@@ -63,7 +63,7 @@ class PeerConductor:
 
 {
 public:
-	PeerConductor(PeerConnectionClient* client, render::UIcallbackInterface* UIinterface);
+	PeerConductor(PeerConnectionClient* client, render::UiObserver* UIinterface);
 	~PeerConductor();
 	bool InitializePeerConnection();
 	void DeletePeerConnection();
@@ -114,7 +114,7 @@ public:
 
 private:
 	int peer_id_;
-	render::UIcallbackInterface *UI_;
+	render::UiObserver *UI_;
 	talk_base::scoped_refptr<webrtc::PeerConnectionInterface> peer_connection_;
 	talk_base::scoped_refptr<webrtc::PeerConnectionFactoryInterface>
 		peer_connection_factory_;

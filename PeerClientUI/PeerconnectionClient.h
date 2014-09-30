@@ -16,14 +16,14 @@
 #include "stringutils.h"
 #include "QtNetwork\qtcpsocket.h"
 #include "qasysocket.h"
-#include "UIcallbackInterface.h"
+#include "UiObserver.h"
 #ifdef WIN32
 #include "talk/base/win32socketserver.h"
 #endif
 #include "json/json.h"
 namespace render
 {
-	class UIcallbackInterface;
+	class UiObserver;
 }
 typedef std::map<int, std::string> Peers;
 #define INVALID_ID -1
@@ -72,7 +72,7 @@ public:
 		SIGNING_OUT,
 		RESOLVING
 	};
-	explicit PeerConnectionClient(render::UIcallbackInterface*);
+	explicit PeerConnectionClient(render::UiObserver*);
 	~PeerConnectionClient();
 
 	int id(){ return my_id_; }
@@ -118,7 +118,7 @@ public:
 	State state_;
 	int my_id_;
 	PeerConnectionClientObserver *client_observer_;
-	render::UIcallbackInterface* UI_;
+	render::UiObserver* UI_;
 	CRITICAL_SECTION lock;
 };
 

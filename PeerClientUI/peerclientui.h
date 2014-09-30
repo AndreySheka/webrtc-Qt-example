@@ -18,13 +18,13 @@
 namespace render
 {
 	class VCWnd;
-	class UIcallbackInterface;
+	class UiObserver;
 }
 
 
 class PeerClientUI : 
 	public QMainWindow,
-	public render::UIcallbackInterface
+	public render::UiObserver
 
 {
 	Q_OBJECT
@@ -36,6 +36,7 @@ public:
 	
 	void SetUIstatus(PeerStatus status);
 	void InitializeClient();
+	void initUi();
 	virtual void StartLocalRenderer(webrtc::VideoTrackInterface* local_video);
 	virtual void StopLocalRenderer();
 	virtual void StartRemoteRenderer(webrtc::VideoTrackInterface* remote_video);
@@ -43,17 +44,17 @@ public:
 	virtual void RefreshPeerList(Json::Value peers);
 	virtual void closeEvent(QCloseEvent* event);
 	virtual void timerEvent(QTimerEvent *event);
-	virtual void log(LogType type, QString* log);
+	virtual void log(LogType type, QString* log,bool onconsl);
 	virtual void msgbox(LogType type, QString* log);
 private:
 	PeerConnectionClient* client_;
 	talk_base::scoped_refptr<PeerConductor> conductor_;
 	std::string server_;
 	int port_;
-	bool is_connected;
+	bool is_connected_;
 	QStringList peers_;
 	QStringListModel* model_;
-	QElapsedTimer timer;
+	QElapsedTimer timer_;
 	int timer_id_;
 	int pending_timer_;
 	

@@ -104,8 +104,8 @@ void *PeerClientUI::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_PeerClientUI.stringdata))
         return static_cast<void*>(const_cast< PeerClientUI*>(this));
-    if (!strcmp(_clname, "render::UIcallbackInterface"))
-        return static_cast< render::UIcallbackInterface*>(const_cast< PeerClientUI*>(this));
+    if (!strcmp(_clname, "render::UiObserver"))
+        return static_cast< render::UiObserver*>(const_cast< PeerClientUI*>(this));
     return QMainWindow::qt_metacast(_clname);
 }
 

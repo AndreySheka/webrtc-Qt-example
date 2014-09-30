@@ -1,7 +1,7 @@
 #include "PeerConductor.h"
 #include "talk\app\webrtc\mediastreaminterface.h"
 #include "F:\webrtc\trunk\talk\media\base\capturemanager.cc"
-PeerConductor::PeerConductor(PeerConnectionClient *client, render::UIcallbackInterface* UIinterface)
+PeerConductor::PeerConductor(PeerConnectionClient *client, render::UiObserver* UIinterface)
 	:client_(client), 
 	peer_id_(INVALID_ID),
 	UI_(UIinterface)
@@ -20,7 +20,7 @@ bool PeerConductor::OnStartLogin(const std::string server, int port)
 {
 	if (client_->is_connected())
 	{
-		UI_->log(render::UIcallbackInterface::WARNING, new QString("already logged in."));
+		UI_->log(render::UiObserver::WARNING, new QString("already logged in."), true);
 		return false;
 	}
 		
@@ -32,14 +32,14 @@ void PeerConductor::OnSignedIn()
 {
 	UI_->ui.stackedWidget->setCurrentIndex(1);
 	client_->state_ = PeerConnectionClient::State::SIGNED_IN;
-	UI_->log(render::UIcallbackInterface::NORMAL, new QString("suecceed to sign in."));
+	UI_->log(render::UiObserver::NORMAL, new QString("suecceed to sign in."), true);
 }
 
 void PeerConductor::OnDisconnected()
 {
 	client_->close();
 	server_.clear();
-	UI_->log(render::UIcallbackInterface::NORMAL, new QString("suecceed to sign out."));
+	UI_->log(render::UiObserver::NORMAL, new QString("suecceed to sign out."), true);
 }
 
 void PeerConductor::OnMessageFromPeer(int peer_id, const Json::Value message)
@@ -83,15 +83,15 @@ void PeerConductor::OnMessageFromPeer(int peer_id, const Json::Value message)
 		sdp = message["sdp"].asString();
 		if (sdp.empty()) 
 		{
-			UI_->log(render::UIcallbackInterface::WARNING, new QString("cannot read sdp info from peer."));
+			UI_->log(render::UiObserver::WARNING, new QString("cannot read sdp info from peer."), true);
 			return;
 		}
 		webrtc::SessionDescriptionInterface* session_description(
 			webrtc::CreateSessionDescription(type, sdp));
-		UI_->log(render::UIcallbackInterface::NORMAL, new QString("sdp received from peer."));
+		UI_->log(render::UiObserver::NORMAL, new QString("sdp received from peer."), true);
 		if (!session_description) 
 		{
-			UI_->log(render::UIcallbackInterface::ERRORS, new QString("create sdp faild."));
+			UI_->log(render::UiObserver::ERRORS, new QString("create sdp faild."), true);
 			return;
 		}
 		peer_connection_->SetRemoteDescription(
@@ -115,7 +115,7 @@ void PeerConductor::OnMessageFromPeer(int peer_id, const Json::Value message)
 			sdp_mlineindex<0 ||
 			sdpCandidate.empty())
 		{
-			UI_->log(render::UIcallbackInterface::ERRORS, new QString("cannot get ice candidate info from peer."));
+			UI_->log(render::UiObserver::ERRORS, new QString("cannot get ice candidate info from peer."), true);
 			return;
 		}
 		talk_base::scoped_ptr<webrtc::IceCandidateInterface> candidate(
@@ -123,13 +123,13 @@ void PeerConductor::OnMessageFromPeer(int peer_id, const Json::Value message)
 
 		if (!candidate.get()) 
 		{
-			UI_->log(render::UIcallbackInterface::ERRORS, new QString("cannot get ice candidate info from peer."));
+			UI_->log(render::UiObserver::ERRORS, new QString("cannot get ice candidate info from peer."), true);
 			return;
 		}
-		UI_->log(render::UIcallbackInterface::NORMAL, new QString("ice candidate info received."));
+		UI_->log(render::UiObserver::NORMAL, new QString("ice candidate info received."), true);
 		if (!peer_connection_->AddIceCandidate(candidate.get())) 
 		{
-			UI_->log(render::UIcallbackInterface::ERRORS, new QString("failed to add candidate."));
+			UI_->log(render::UiObserver::ERRORS, new QString("failed to add candidate."), true);
 			return;
 		}
 		return;
@@ -145,7 +145,7 @@ void PeerConductor::OnConnectToPeer(int peer_id)
 	if (peer_connection_.get()) 
 	{
 		//err
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("peer connection creation failed."));
+		UI_->log(render::UiObserver::ERRORS, new QString("peer connection creation failed."), true);
 		return;
 	}
 
@@ -156,7 +156,7 @@ void PeerConductor::OnConnectToPeer(int peer_id)
 	}
 	else 
 	{
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("peer connection initialization failed."));
+		UI_->log(render::UiObserver::ERRORS, new QString("peer connection initialization failed."), true);
 		//err
 	}
 }
@@ -170,7 +170,7 @@ bool PeerConductor::InitializePeerConnection()
 
 	if (!peer_connection_factory_.get()) 
 	{
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("peer connection factory initialization failed."));
+		UI_->log(render::UiObserver::ERRORS, new QString("peer connection factory initialization failed."), true);
 		DeletePeerConnection();
 		return false;
 	}
@@ -187,11 +187,11 @@ bool PeerConductor::InitializePeerConnection()
 	if (!peer_connection_) {
 		//err
 
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("peer connection creation failed."));
+		UI_->log(render::UiObserver::ERRORS, new QString("peer connection creation failed."), true);
 		DeletePeerConnection();
 	}
 	AddStreams();
-	UI_->log(UI_->NORMAL, new QString("Initialization of PeerConnection finished."));
+	UI_->log(UI_->NORMAL, new QString("Initialization of PeerConnection finished."), true);
 	return peer_connection_.get() != NULL;
 }
 
@@ -202,17 +202,17 @@ void PeerConductor::DeletePeerConnection()
 	peer_connection_.release();
 	peer_connection_factory_.release();
 	peer_id_ = -1;
-	UI_->log(render::UIcallbackInterface::NORMAL, new QString("succeed to delete peer."));
+	UI_->log(render::UiObserver::NORMAL, new QString("succeed to delete peer."), true);
 }
 
 void PeerConductor::AddStreams() {
 	if (active_streams_.find(kStreamLabel) != active_streams_.end())
 	{
-		UI_->log(render::UIcallbackInterface::NORMAL, new QString("streams already added."));
+		UI_->log(render::UiObserver::NORMAL, new QString("streams already added."), true);
 		UI_->StartLocalRenderer(video_track_);
 		if (!peer_connection_->AddStream(stream_, NULL)) {
 			//err
-			UI_->log(render::UIcallbackInterface::ERRORS, new QString("streams addition failed."));
+			UI_->log(render::UiObserver::ERRORS, new QString("streams addition failed."), true);
 		}
 		return;  // Already added.
 	}
@@ -237,10 +237,10 @@ void PeerConductor::AddStreams() {
 	audio_track_ = audio_track.get();
 	video_track_ = video_track.get();
 	stream_ = stream;
-	UI_->log(UI_->NORMAL, new QString("audio and video streams added."));
+	UI_->log(UI_->NORMAL, new QString("audio and video streams added."), true);
 	if (!peer_connection_->AddStream(stream, NULL)) {
 		//err
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("streams addition failed."));
+		UI_->log(render::UiObserver::ERRORS, new QString("streams addition failed."), true);
 	}
 	typedef std::pair<std::string,
 		talk_base::scoped_refptr<webrtc::MediaStreamInterface> >
@@ -260,14 +260,14 @@ void PeerConductor::OnSuccess(webrtc::SessionDescriptionInterface* desc)
 	jmessage["sdp"] = sdp;
 	std::string msg = writer.write(jmessage);
 	ASSERT(peer_id_!=-1);
-	UI_->log(UI_->NORMAL, new QString("sdp created successfully."));
+	UI_->log(UI_->NORMAL, new QString("sdp created successfully."), true);
 	UI_->pending_messages_.push_back(jmessage);
 }
 
 // Called when a remote stream is added
 void PeerConductor::OnAddStream(webrtc::MediaStreamInterface* stream)
 {
-	UI_->log(render::UIcallbackInterface::NORMAL, new QString("remote stream received."));
+	UI_->log(render::UiObserver::NORMAL, new QString("remote stream received."), true);
 	webrtc::VideoTrackVector tracks = stream->GetVideoTracks();
 	// Only render the first track.
 	if (!tracks.empty()) 
@@ -289,7 +289,7 @@ void PeerConductor::OnIceCandidate(const webrtc::IceCandidateInterface* candidat
 	if (!candidate->ToString(&sdpCandidate))
 	{
 		//err
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("cannot get candidate info."));
+		UI_->log(render::UiObserver::ERRORS, new QString("cannot get candidate info."), true);
 		return;
 	}
 	jmessage["candidate"] = sdpCandidate;
@@ -301,7 +301,7 @@ void PeerConductor::OnDisconnectFromCurrentPeer()
 {
 	DeletePeerConnection();
 	UI_->peer_state_ = UI_->NOT_CONNECTED;
-	UI_->SetUIstatus(render::UIcallbackInterface::PeerStatus::CONNECTED);
+	UI_->SetUIstatus(render::UiObserver::PeerStatus::CONNECTED);
 	if (UI_->own_wnd_)
 	{
 		delete UI_->own_wnd_;
@@ -321,13 +321,13 @@ cricket::VideoCapturer* PeerConductor::OpenVideoCaptureDevice()
 		cricket::DeviceManagerFactory::Create());
 	if (!dev_manager->Init()) {
 		//err
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("device manager initialization failed"));
+		UI_->log(render::UiObserver::ERRORS, new QString("device manager initialization failed"), true);
 		return NULL;
 	}
 	std::vector<cricket::Device> devs;
 	if (!dev_manager->GetVideoCaptureDevices(&devs)) {
 		//err
-		UI_->log(render::UIcallbackInterface::ERRORS, new QString("device manager accession to video captrue device failed."));
+		UI_->log(render::UiObserver::ERRORS, new QString("device manager accession to video captrue device failed."), true);
 		return NULL;
 	}
 	std::vector<cricket::Device>::iterator dev_it = devs.begin();

@@ -5,7 +5,7 @@
 WinsockInitializer winsocketinit;
 using talk_base::sprintfn;
 char stdHead[] = "POST / HTTP/1.0\r\n\r\n";
-PeerConnectionClient::PeerConnectionClient(render::UIcallbackInterface* ui_interface)
+PeerConnectionClient::PeerConnectionClient(render::UiObserver* ui_interface)
 	:my_id_(INVALID_ID),
 	resolver_(NULL),
 	state_(NOT_SIGN_IN),
@@ -44,14 +44,14 @@ bool PeerConnectionClient::ConnectToServer(const std::string& server, int port)
 	ASSERT(!client_name_.empty());
 	if (state_ != NOT_SIGN_IN) 
 	{
-		UI_->log(UI_->WARNING, new QString("already logged in."));
+		UI_->log(UI_->WARNING, new QString("already logged in."), true);
 		client_observer_->OnServerConnectionFailure();
 		return false;
 	}
 
 	if (server.empty() || client_name_.empty()) 
 	{
-		UI_->log(UI_->ERRORS, new QString("server ip or client name is empty."));
+		UI_->log(UI_->ERRORS, new QString("server ip or client name is empty."), true);
 		client_observer_->OnServerConnectionFailure();
 		return false;
 	}
@@ -90,8 +90,8 @@ bool PeerConnectionClient::DoConnect()
 		state_ = SIGNING_IN;
 	if (!ret) 
 	{
-		UI_->log(UI_->ERRORS, new QString("cannot connect to server."));
-		UI_->msgbox(UI_->WARNING, new QString("cannot connect to server.\nplease check the ip/port\nthen try again."));
+		UI_->log(UI_->ERRORS, new QString("cannot connect to server."), true);
+		UI_->log(UI_->WARNING, new QString("cannot connect to server.\nplease check the ip/port\nthen try again."), false);
 		client_observer_->OnServerConnectionFailure();
 	}
 	return ret;
@@ -140,7 +140,7 @@ void PeerConnectionClient::OnRead(QAsySocket* socket)
 		{
 			Json::Value list_root = control_data_["list"];
 			client_observer_->OnListChange(list_root);
-			UI_->log(UI_->NORMAL, new QString("peer list changed."));
+			UI_->log(UI_->NORMAL, new QString("peer list changed."), true);
 		}
 		else if (action=="sign_out")
 		{
@@ -154,7 +154,7 @@ void PeerConnectionClient::OnRead(QAsySocket* socket)
 		}
 		else
 		{
-			UI_->log(UI_->WARNING, new QString("unknown message received."));
+			UI_->log(UI_->WARNING, new QString("unknown message received."), true);
 			client_observer_->OnServerConnectionFailure();
 		}
 	}
@@ -184,7 +184,7 @@ bool PeerConnectionClient::ReadIntoBuffer(QAsySocket* socket,
 		data.clear();
 		if (reader.parse(sm[1], data)) return true;//sm[1] always means backreference
 	}
-	UI_->log(UI_->WARNING, new QString("cannot find any data."));
+	UI_->log(UI_->WARNING, new QString("cannot find any data."), true);
 	LeaveCriticalSection(&lock);
 	return false;
 
@@ -261,7 +261,7 @@ bool PeerConnectionClient::SendMessageToPeer(int peer_id, const Json::Value mess
 {
 	if (state_ != SIGNED_IN)
 	{
-		UI_->log(UI_->ERRORS, new QString("can't send message to peer before having logged in."));
+		UI_->log(UI_->ERRORS, new QString("can't send message to peer before having logged in."), true);
 		return false;
 	}
 		

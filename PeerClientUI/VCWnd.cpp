@@ -1,7 +1,7 @@
 #include "VCWnd.h"
 #include <assert.h>
 QPoint render::VCWnd::wnd_location_ = QPoint(20, 20);
-render::VCWnd::VCWnd(UIcallbackInterface* UI, bool islocal)
+render::VCWnd::VCWnd(UiObserver* UI, bool islocal)
 	:UI_(UI),
 	is_local_(islocal)
 {

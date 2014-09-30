@@ -3,11 +3,11 @@
 #pragma once
 #include "QtWidgets\qmainwindow.h"
 #include "QtGui\qpainter.h"
-#include "UIcallbackInterface.h"
+#include "UiObserver.h"
 #include "QtCore\qpoint.h"
 namespace render
 {
-	class UIcallbackInterface;
+	class UiObserver;
 }
 namespace render
 {
@@ -15,7 +15,7 @@ namespace render
 		public QMainWindow
 	{
 	public:
-		explicit VCWnd(render::UIcallbackInterface* UI,bool islocal);
+		explicit VCWnd(render::UiObserver* UI, bool islocal);
 		~VCWnd();
 	protected:
 		void paintEvent(QPaintEvent* event);
@@ -25,7 +25,7 @@ namespace render
 		void RemoteFrameRenderer();
 		bool is_local_;
 		static QPoint wnd_location_;
-		render::UIcallbackInterface* UI_;
+		render::UiObserver* UI_;
 	};
 }
 

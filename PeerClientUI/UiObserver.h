@@ -15,7 +15,7 @@ namespace render
 class VideoRenderer;
 namespace render
 {
-	class UIcallbackInterface
+	class UiObserver
 	{
 	public:
 		enum PeerStatus
@@ -29,14 +29,14 @@ namespace render
 			WARNING,
 			ERRORS
 		};
-		virtual ~UIcallbackInterface(){}
+		virtual ~UiObserver(){}
 		virtual void StartLocalRenderer(webrtc::VideoTrackInterface* local_video) = 0;
 		virtual void StopLocalRenderer() = 0;
 		virtual void StartRemoteRenderer(webrtc::VideoTrackInterface* remote_video) = 0;
 		virtual void StopRemoteRenderer() = 0;
 		virtual void RefreshPeerList(Json::Value) = 0;
 		virtual void SetUIstatus(PeerStatus status) = 0;
-		virtual void log(LogType type, QString* log) = 0;
+		virtual void log(LogType type, QString* log,bool onconsl) = 0;
 		virtual void OnTalk() = 0;
 		virtual void timerEvent(QTimerEvent *event) = 0;
 		virtual void msgbox(LogType type, QString* log) = 0;
@@ -49,7 +49,7 @@ namespace render
 		std::deque<Json::Value> pending_messages_;
 		PeerStatus peer_state_;
 		int peer_id_;
-		bool is_pending_messages_;
+		bool is_pending_msg_;
 		talk_base::scoped_ptr<VideoRenderer> local_renderer_;
 		talk_base::scoped_ptr<VideoRenderer> remote_renderer_;
 	};

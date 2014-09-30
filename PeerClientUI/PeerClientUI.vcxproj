@@ -154,7 +154,7 @@
     </CustomBuild>
     <ClInclude Include="resource.h" />
     <ClInclude Include="stringutils.h" />
-    <ClInclude Include="UIcallbackInterface.h" />
+    <ClInclude Include="UiObserver.h" />
     <ClInclude Include="VCWnd.h" />
     <ClInclude Include="VideoRenderer.h" />
   </ItemGroup>
