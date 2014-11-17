@@ -1,7 +1,7 @@
 webrtc-Qt-example
 =================
 
-this is a typical example of webrtc with Qt. it developed from 
+this is a typical video chat example of webrtc with Qt. it developed from 
 google code project webrtc. it also "borrowed" code from webrtc
 project.(locate in trunk\talk\examples\peerconnection directory)
 
